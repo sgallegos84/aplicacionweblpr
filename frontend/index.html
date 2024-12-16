@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscador de Placas</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body>
+  <h1>Buscador de Placas</h1>
+
+  <!-- Formulario de búsqueda -->
+  <form id="searchForm">
+    <label for="plateNumber">Placa:</label>
+    <input type="text" id="plateNumber" name="plateNumber" required>
+    
+    <label for="startDate">Inicio:</label>
+    <input type="datetime-local" id="startDate" name="startDate" required>
+    
+    <label for="endDate">Fin:</label>
+    <input type="datetime-local" id="endDate" name="endDate" required>
+    
+    <button type="submit">Buscar</button>
+  </form>
+
+  <div id="map"></div>
+
+  <!-- Contenedor para la tabla de resultados -->
+  <button id="exportCSV">Exportar a CSV</button>
+  <div id="resultsTable"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
