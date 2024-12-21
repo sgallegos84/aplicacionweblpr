@@ -29,37 +29,32 @@ app.get('/api/pois', async (req, res) => {
 
 // Ruta para buscar placas
 app.get('/api/searchPlate', async (req, res) => {
-  const { plateNumber, brand, model, type, color, name, startDate, endDate } = req.query;
+  const { plateNumber, startDate, endDate } = req.query;
 
   if (!startDate || !endDate) {
     return res.status(400).json({ error: 'Las fechas de inicio y fin son obligatorias.' });
   }
 
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  const diff = Math.abs(end - start) / (1000 * 60 * 60 * 24);
-
-  if (diff > 7) {
-    return res.status(400).json({ error: 'El periodo de búsqueda no debe exceder 7 días.' });
-  }
+  console.log('Fechas:', startDate, endDate);  // Verificar los valores de las fechas
 
   try {
     const query = `
       SELECT D.[cam_id] AS ID, N.NAME AS PMI, D.[confidence], D.[country_code], 
              D.[datetime], D.[plate] AS PlateNumber, D.[vehicle_brand], 
              D.[vehicle_color], D.[vehicle_model], D.[vehicle_type], 
-             N.latitude AS Latitude, N.longitude AS Longitude
+             N.latitude AS Latitude, N.longitude AS Longitude, D.plate_guid AS PlateGuid, D.slave_id AS SlaveId
       FROM [dbo].[DetectionPSIM] D
       LEFT JOIN [dbo].[LPR_PSIM] N ON D.cam_id = N.Id
       WHERE (@plateNumber IS NULL OR D.plate = @plateNumber)
         AND D.[datetime] BETWEEN @startDate AND @endDate
       ORDER BY D.[datetime] ASC;
     `;
-
+    
     const request = new sql.Request();
+    // Conviértelas a DateTime2
     request.input('plateNumber', sql.VarChar, plateNumber || null);
-    request.input('startDate', sql.DateTime2, startDate);
-    request.input('endDate', sql.DateTime2, endDate);
+    request.input('startDate', sql.DateTime2, new Date(startDate));
+    request.input('endDate', sql.DateTime2, new Date(endDate));
 
     const result = await request.query(query);
 
@@ -69,7 +64,8 @@ app.get('/api/searchPlate', async (req, res) => {
 
     res.json(result.recordset);
   } catch (error) {
-    res.status(500).json({ error: 'Error al buscar los registros.' });
+    console.error('Error al ejecutar la consulta:', error);
+    res.status(500).json({ error: 'Error al ejecutar la consulta: ' + error.message });
   }
 });
 
