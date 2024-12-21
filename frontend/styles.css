@@ -1,3 +1,5 @@
+/* styles.css */
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -31,8 +33,8 @@ form button {
 }
 
 #map {
-  width: 100%;
-  height: 500px;
+  width: 100%; /* Asegúrate de que el mapa ocupe todo el ancho disponible */
+  height: 500px; /* Define una altura fija para que Leaflet pueda renderizarse */
   margin: 20px 0;
   border: 2px solid #ddd;
   border-radius: 5px;

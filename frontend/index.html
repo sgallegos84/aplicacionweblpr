@@ -3,24 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Buscador de Placas</title>
+  <title>Buscador de Vehículos</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 <body>
-  <h1>Buscador de Placas</h1>
+  <h1>Buscador de Vehículos</h1>
 
   <!-- Formulario de búsqueda -->
   <form id="searchForm">
     <label for="plateNumber">Placa:</label>
-    <input type="text" id="plateNumber" name="plateNumber" required>
-    
+    <input type="text" id="plateNumber" name="plateNumber">
+
+    <label for="brand">Marca:</label>
+    <input type="text" id="brand" name="brand">
+
+    <label for="model">Modelo:</label>
+    <input type="text" id="model" name="model">
+
+    <label for="type">Tipo:</label>
+    <input type="text" id="type" name="type">
+
+    <label for="color">Color:</label>
+    <input type="text" id="color" name="color">
+
+    <label for="name">PMI:</label>
+    <input type="text" id="name" name="name">
+
     <label for="startDate">Inicio:</label>
     <input type="datetime-local" id="startDate" name="startDate" required>
-    
+
     <label for="endDate">Fin:</label>
     <input type="datetime-local" id="endDate" name="endDate" required>
-    
+
     <button type="submit">Buscar</button>
   </form>
 
