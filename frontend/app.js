@@ -32,11 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
 
     const plateNumber = document.getElementById('plateNumber').value;
-    const brand = document.getElementById('brand').value;
-    const model = document.getElementById('model').value;
-    const type = document.getElementById('type').value;
-    const color = document.getElementById('color').value;
-    const name = document.getElementById('name').value;
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
 

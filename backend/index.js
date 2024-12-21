@@ -52,22 +52,12 @@ app.get('/api/searchPlate', async (req, res) => {
       FROM [dbo].[DetectionPSIM] D
       LEFT JOIN [dbo].[LPR_PSIM] N ON D.cam_id = N.Id
       WHERE (@plateNumber IS NULL OR D.plate = @plateNumber)
-        AND (@brand IS NULL OR D.vehicle_brand = @brand)
-        AND (@model IS NULL OR D.vehicle_model = @model)
-        AND (@type IS NULL OR D.vehicle_type = @type)
-        AND (@color IS NULL OR D.vehicle_color = @color)
-        AND (@name IS NULL OR N.name LIKE '%' + @name + '%')
         AND D.[datetime] BETWEEN @startDate AND @endDate
       ORDER BY D.[datetime] ASC;
     `;
 
     const request = new sql.Request();
     request.input('plateNumber', sql.VarChar, plateNumber || null);
-    request.input('brand', sql.VarChar, brand || null);
-    request.input('model', sql.VarChar, model || null);
-    request.input('type', sql.VarChar, type || null);
-    request.input('color', sql.VarChar, color || null);
-    request.input('name', sql.VarChar, name || null);
     request.input('startDate', sql.DateTime2, startDate);
     request.input('endDate', sql.DateTime2, endDate);
 
