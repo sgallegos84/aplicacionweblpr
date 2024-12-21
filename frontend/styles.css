@@ -40,10 +40,17 @@ form button {
   border-radius: 5px;
 }
 
+/* Estilo para el contenedor de la tabla con scroll */
+#resultsTable {
+  max-height: 400px; /* Establece la altura máxima que deseas para la tabla */
+  overflow-y: auto; /* Habilita el scroll vertical */
+  border: 2px solid #ddd; /* Borde para la tabla */
+  margin-top: 20px; /* Espaciado superior */
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
 }
 
 table th, table td {
