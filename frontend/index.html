@@ -23,12 +23,18 @@
 
     <button type="submit">Buscar</button>
   </form>
+<!-- Modal -->
+<div id="imageModal" class="modal">
+  <span class="close" onclick="document.getElementById('imageModal').style.display='none'">&times;</span>
+  <img class="modal-content" id="modalImage" />
+</div>
 
   <div id="map"></div>
 
   <!-- Contenedor para la tabla de resultados -->
   <button id="exportCSV">Exportar a CSV</button>
   <div id="resultsTable"></div>
+
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="app.js"></script>

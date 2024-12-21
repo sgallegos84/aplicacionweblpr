@@ -63,3 +63,39 @@ table th {
   background-color: #f4f4f4;
   font-weight: bold;
 }
+/* Estilos para el modal */
+.modal {
+  display: none;  /* Por defecto, el modal está oculto */
+  position: fixed; /* Aseguramos que se quede fijo en la pantalla */
+  z-index: 9999;   /* Un valor alto para asegurarnos de que esté sobre otros elementos */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro y semitransparente */
+  padding-top: 60px; /* Para que el contenido esté centrado */
+}
+
+.modal-content {
+  margin: auto;
+  display: block;
+  width: 80%; /* Ajustar el tamaño de la imagen */
+  max-width: 700px; /* Tamaño máximo de la imagen */
+}
+
+.close {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}

@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Resultados:', data);
         if (Array.isArray(data)) {
           displayResultsInTable(data); // Muestra los resultados en la tabla
+          drawTrajectory(data); // Dibuja las trayectorias
         } else {
           console.error('Error en los datos de respuesta:', data);
         }
@@ -59,11 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
     <table>
       <thead>
         <tr>
-          
           <th>PMI</th>
           <th>Placa</th>
-          <th>Fotografia</th>
-          <th>Panoramica</th>
+          <th>Fotografía</th>
+          <th>Panorámica</th>
           <th>Marca</th>
           <th>Modelo</th>
           <th>Color</th>
@@ -71,7 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
           <th>Fecha y Hora</th>
           <th>Latitud</th>
           <th>Longitud</th>
-          
         </tr>
       </thead>
       <tbody>`;
@@ -79,11 +78,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Agregar filas de resultados a la tabla
     data.forEach(result => {
       tableHtml += `<tr>
-                      
                       <td>${result.PMI}</td>
                       <td>${result.PlateNumber}</td>
-                      <td><img src="http://${result.SlaveId}:10001/lprserver/GetImage/Plate_numbers/${result.PlateGuid}" alt="${result.PlateNumber}" /></td>
-                      <td><img src="http://${result.SlaveId}:10001/lprserver/GetImage/Frames/${result.PlateGuid}" alt="${result.PlateNumber}" width="100" height="100"/></td>
+                      <td><img class="thumbnail" src="http://${result.SlaveId}:10001/lprserver/GetImage/Plate_numbers/${result.PlateGuid}" alt="${result.PlateNumber}" /></td>
+                      <td><img class="thumbnail" src="http://${result.SlaveId}:10001/lprserver/GetImage/Frames/${result.PlateGuid}" alt="${result.PlateNumber}" width="100" height="100" onclick="openModal('${result.SlaveId}', '${result.PlateGuid}')"/></td>
                       <td>${result.vehicle_brand}</td>
                       <td>${result.vehicle_model}</td>
                       <td>${result.vehicle_color}</td>
@@ -91,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
                       <td>${result.datetime}</td>
                       <td>${result.Latitude}</td>
                       <td>${result.Longitude}</td>
-                      
                     </tr>`;
     });
 
@@ -99,5 +96,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Mostrar la tabla en el contenedor
     resultsTable.innerHTML = tableHtml;
+  }
+
+  // Función para abrir el modal
+  window.openModal = (slaveId, plateGuid) => {
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+
+    // Establecer el src de la imagen grande
+    modalImg.src = `http://${slaveId}:10001/lprserver/GetImage/Frames/${plateGuid}`;
+    modal.style.display = 'block';  // Mostrar el modal
+  };
+
+  // Cerrar el modal cuando se hace clic en el área fuera de la imagen
+  window.onclick = (event) => {
+    const modal = document.getElementById('imageModal');
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  };
+
+  // Función para dibujar la trayectoria
+  function drawTrajectory(data) {
+    // Agrupar los resultados por PlateNumber
+    const groupedData = {};
+    data.forEach(result => {
+      if (!groupedData[result.PlateNumber]) {
+        groupedData[result.PlateNumber] = [];
+      }
+      groupedData[result.PlateNumber].push([result.Latitude, result.Longitude]);
+    });
+
+    // Dibujar la trayectoria para cada placa
+    for (const plateNumber in groupedData) {
+      const points = groupedData[plateNumber];
+
+      // Dibujar la línea que conecta los puntos
+      L.polyline(points, { color: 'blue', weight: 3, opacity: 0.7 }).addTo(map);
+    }
   }
 });
