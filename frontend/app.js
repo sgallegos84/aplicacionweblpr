@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
     attribution: '&copy; OpenStreetMap contributors',
   }).addTo(map);
 
+  // Variable para almacenar las capas de la trayectoria
+  let trajectoryLayers = [];
+
   // Función para cargar puntos de interés
   const loadPOIs = () => {
     fetch('/api/pois')
@@ -116,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Función para dibujar la trayectoria
+  // Función para dibujar la trayectoria y limpiar los puntos de interés
   function drawTrajectory(data) {
     // Agrupar los resultados por PlateNumber
     const groupedData = {};
@@ -127,12 +130,36 @@ document.addEventListener('DOMContentLoaded', () => {
       groupedData[result.PlateNumber].push([result.Latitude, result.Longitude]);
     });
 
+    // Limpiar las capas anteriores (puntos de interés y líneas)
+    map.eachLayer(function (layer) {
+      if (layer instanceof L.Marker || layer instanceof L.Polyline) {
+        map.removeLayer(layer);
+      }
+    });
+
     // Dibujar la trayectoria para cada placa
     for (const plateNumber in groupedData) {
       const points = groupedData[plateNumber];
 
       // Dibujar la línea que conecta los puntos
-      L.polyline(points, { color: 'red', weight: 3, opacity: 0.7 }).addTo(map);
+      const polyline = L.polyline(points, { color: 'red', weight: 3, opacity: 0.7 }).addTo(map);
+      trajectoryLayers.push(polyline);  // Almacenar la polilínea para poder limpiarla más tarde
+
+      // Agregar los puntos de interés solo dentro de la línea (puntos de la trayectoria)
+      points.forEach((point) => {
+        L.marker(point).addTo(map);
+      });
     }
   }
+
+  // Evento para el botón "Mostrar Puntos de Interés"
+  document.getElementById('loadPOIsButton').addEventListener('click', () => {
+    // Limpiar las trayectorias antes de cargar los puntos de interés
+    trajectoryLayers.forEach(layer => {
+      map.removeLayer(layer);
+    });
+    trajectoryLayers = []; // Limpiar el arreglo que almacena las capas de trayectoria
+
+    loadPOIs();  // Llamamos a la función para cargar nuevamente los puntos de interés
+  });
 });
