@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const points = groupedData[plateNumber];
 
       // Dibujar la línea que conecta los puntos
-      L.polyline(points, { color: 'blue', weight: 3, opacity: 0.7 }).addTo(map);
+      L.polyline(points, { color: 'red', weight: 3, opacity: 0.7 }).addTo(map);
     }
   }
 });
