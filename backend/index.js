@@ -43,7 +43,7 @@ app.get('/api/searchPlate', async (req, res) => {
              D.[datetime], D.[plate] AS PlateNumber, D.[vehicle_brand], 
              D.[vehicle_color], D.[vehicle_model], D.[vehicle_type], 
              N.latitude AS Latitude, N.longitude AS Longitude, D.plate_guid AS PlateGuid, D.slave_id AS SlaveId
-      FROM [dbo].[DetectionPSIM] D
+      FROM [dbo].[PSIM_Detection] D
       LEFT JOIN [dbo].[LPR_PSIM] N ON D.cam_id = N.Id
       WHERE (@plateNumber IS NULL OR D.plate = @plateNumber)
         AND D.[datetime] BETWEEN @startDate AND @endDate
