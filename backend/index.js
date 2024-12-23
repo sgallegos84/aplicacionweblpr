@@ -69,6 +69,9 @@ app.get('/api/searchPlate', async (req, res) => {
   }
 });
 
+// Rutas de autenticación
+app.use('/api/auth', authRoutes);  // Usa las rutas de autenticación
+
 // Iniciar servidor
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
