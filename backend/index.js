@@ -2,6 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const sql = require('mssql');
 const dbConfig = require('./dbConfig');
+const bodyParser = require('body-parser');
+const auth = require('./auth');
+const userController = require('./userController');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -69,8 +73,31 @@ app.get('/api/searchPlate', async (req, res) => {
   }
 });
 
-// Rutas de autenticación
-app.use('/api/auth', authRoutes);  // Usa las rutas de autenticación
+// Middleware para parsear JSON
+app.use(bodyParser.json());
+
+// Middleware para verificar JWT
+function authenticateToken(req, res, next) {
+  const token = req.header('Authorization') && req.header('Authorization').split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ error: 'Acceso no autorizado' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ error: 'Token inválido' });
+    }
+    req.user = user;
+    next();
+  });
+}
+
+// Rutas para el login y gestión de usuarios
+app.post('/api/login', auth.loginUser); // Login de usuario
+app.post('/api/users', authenticateToken, userController.createUser); // Crear un usuario
+app.get('/api/users', authenticateToken, userController.getUsers); // Obtener usuarios
+
 
 // Iniciar servidor
 app.listen(port, () => {
