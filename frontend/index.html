@@ -35,50 +35,6 @@
   <!-- Contenedor para la tabla de resultados -->
   <button id="loadPOIsButton">Restaura puntos</button>
   <div id="resultsTable"></div>
-
-  <script>
-    // Verificar si el token existe en localStorage
-    document.addEventListener('DOMContentLoaded', function() {
-      const token = localStorage.getItem('token');
-
-      if (!token) {
-        // Si no hay token, redirige al login
-        window.location.href = 'login.html';
-      } else {
-        // Si el token existe, verifica su validez (opcional)
-        // Esto se puede hacer en el backend o en el frontend
-        validateToken(token);
-      }
-    });
-
-    // Función para validar el token
-    async function validateToken(token) {
-      try {
-        const response = await fetch('/api/validate-token', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          }
-        });
-
-        const data = await response.json();
-
-        if (data.isValid) {
-          // El token es válido, continuar con la carga de la página
-          console.log('Token válido');
-        } else {
-          // Si el token no es válido, redirigir al login
-          localStorage.removeItem('token');
-          window.location.href = 'login.html';
-        }
-      } catch (error) {
-        console.error('Error al verificar el token', error);
-        localStorage.removeItem('token');
-        window.location.href = 'login.html';  // Redirigir si hay un error
-      }
-    }
-  </script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="app.js"></script>
 </body>

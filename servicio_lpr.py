@@ -252,7 +252,7 @@ def consultar_vehiculo_robado(conn_mobileapps, conn_robados, placa, evento):
         cursor_robados = conn_robados.cursor()
 
         cursor_robados.execute("""
-            SELECT [Placa] FROM Robados_PSIM_Prueba WHERE [Placa] = ?
+            SELECT [CI],[Placa] FROM Robados_PSIM_Prueba WHERE [Placa] = ?
         """, placa)
 
         if cursor_robados.fetchone():
@@ -289,7 +289,7 @@ def enviar_solicitud_post(vehiculo, ubicacion, fecha_evento, conn_mobileapps):
     info_lugar = vehiculo['cam_name']
     imagen_ruta_plate = f"http://{vehiculo['SlaveId']}:10001/lprserver/GetImage/Plate_numbers/{vehiculo['PlateGuid']}"
     imagen_ruta_frames = f"http://{vehiculo['SlaveId']}:10001/lprserver/GetImage/Frames/{vehiculo['PlateGuid']}"
-    placa = vehiculo['plate']
+    placa_veh = vehiculo['plate']
     marca = vehiculo.get('vehicle_brand', '')
     modelo = vehiculo.get('vehicle_model', '') 
     color = vehiculo.get('vehicle_color', '')
@@ -377,7 +377,7 @@ def enviar_solicitud_post(vehiculo, ubicacion, fecha_evento, conn_mobileapps):
             "",
             "", 
             "", 
-            placa, 
+            placa_veh, 
             "", 
             "", 
             "", 
